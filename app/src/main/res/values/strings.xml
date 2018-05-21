@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Workout</string>
+    <string name="title_home">Workouts</string>
+    <string name="title_calendar">Calendar</string>
+    <string name="title_profile">Profile</string>
+    <string name="country_prompt">Choose a country</string>
+</resources>
+

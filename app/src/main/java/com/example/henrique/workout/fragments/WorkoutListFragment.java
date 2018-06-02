@@ -51,6 +51,9 @@ public class WorkoutListFragment extends Fragment {
     List<WorkoutPlan> workouts;
     EditText recyclerFilter;
     WorkoutPlanAdapter workoutPlanAdapter;
+    ChildEventListener dataListener;
+    ChildEventListener removeListener;
+    DatabaseReference ref;
 
     // TODO: Rename and change types and number of parameters
     public static WorkoutListFragment newInstance() {
@@ -70,11 +73,6 @@ public class WorkoutListFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_workout_list, container, false);
         bindVariablesToLayout(rootView);
-        workouts = new ArrayList<WorkoutPlan>();
-        workoutPlanAdapter = new WorkoutPlanAdapter(getContext(),workouts);
-        workoutList.setAdapter(workoutPlanAdapter);
-        workoutList.setLayoutManager(new LinearLayoutManager(getContext()));
-        fetchDataFromFirebase();
         recyclerFilter.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
@@ -95,9 +93,8 @@ public class WorkoutListFragment extends Fragment {
     }
 
     public void fetchDataFromFirebase(){
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/workouts");
-        ref.addChildEventListener(new ChildEventListener() {
+        ref = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/workouts");
+        dataListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
                 int index = 0;
@@ -115,11 +112,8 @@ public class WorkoutListFragment extends Fragment {
             }
 
             @Override
-            public void onChildRemoved(DataSnapshot snapshot) {
-                int index = getIndexForKey(snapshot.getKey());
-                workouts.remove(index);
-                workoutPlanAdapter.notifyItemRemoved(index);
-                workoutPlanAdapter.notifyItemRangeChanged(index, workouts.size());
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
             }
 
             @Override
@@ -135,7 +129,50 @@ public class WorkoutListFragment extends Fragment {
             public void onCancelled(DatabaseError error) {
                 Log.e("FirebaseReadError","The read failed: " + error.getCode());
             }
-        });
+        };
+        removeListener = new ChildEventListener(){
+            @Override
+            public void onChildRemoved(DataSnapshot snapshot) {
+                int index = getIndexForKey(snapshot.getKey());
+                workouts.remove(index);
+                workoutPlanAdapter.notifyItemRemoved(index);
+            }
+
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        };
+        ref.addChildEventListener(dataListener);
+        ref.addChildEventListener(removeListener);
+    }
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        workouts = new ArrayList<WorkoutPlan>();
+        workoutPlanAdapter = new WorkoutPlanAdapter(getContext(),workouts);
+        workoutList.setAdapter(workoutPlanAdapter);
+        workoutList.setLayoutManager(new LinearLayoutManager(getContext()));
+        fetchDataFromFirebase();
     }
 
     void filter(String text){
@@ -161,7 +198,13 @@ public class WorkoutListFragment extends Fragment {
         getFragmentManager().popBackStack();
     }
 
+    public void onPause(){
+        super.onPause();
+        ref.removeEventListener(removeListener);
+    }
+
     private int getIndexForKey(String key) {
+        Log.d("BATATA",key);
         int index = 0;
         for (WorkoutPlan workouts : workouts) {
             if (workouts.getWorkoutPlanId().equals(key)) {

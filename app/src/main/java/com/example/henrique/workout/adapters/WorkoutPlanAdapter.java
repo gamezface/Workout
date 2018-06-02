@@ -132,7 +132,7 @@ public class WorkoutPlanAdapter extends RecyclerSwipeAdapter<WorkoutPlanAdapter.
         Fragment masterDetailFragment = new WorkoutPlanFragment();
         masterDetailFragment.setArguments(bundle);
         mFragmentTransaction.addToBackStack(null);
-        mFragmentTransaction.setCustomAnimations(R.anim.slide_in,R.anim.slide_out);
+        mFragmentTransaction.setCustomAnimations(R.anim.slide_in,R.anim.slide_out,R.anim.slide_out,R.anim.slide_in);
         mFragmentTransaction.replace(R.id.fragment_container, masterDetailFragment).commit();
     }
 

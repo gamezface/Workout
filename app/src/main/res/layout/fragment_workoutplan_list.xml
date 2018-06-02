@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.WorkoutPlanFragment"
+    android:background="#fff">
+
+
+    <Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="#fff"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        android:paddingLeft="0dp"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentInsetLeft="0dp"
+        android:contentInsetStart="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp">
+
+            <TextView
+                android:id="@+id/workoutTitle"
+                android:layout_width="147dp"
+                android:layout_height="29dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:elevation="4dp"
+                android:fontFamily="@font/poppins_semibold"
+                android:gravity="center"
+                android:text="Workout Name"
+                android:textColor="#212121"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/flag_transparent"
+                android:elevation="4dp"
+                android:onClick="goBackFragment"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_back"
+                tools:ignore="OnClick" />
+
+            <ImageButton
+                android:id="@+id/more"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/flag_transparent"
+                android:elevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_more_vert_black_24dp" />
+
+            <ToggleButton
+                android:id="@+id/toggleWorkout"
+                android:layout_width="328dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:textOn="@string/pause_workout_button"
+                android:background="@drawable/toggle_button_background"
+                android:drawableRight="@drawable/toggle_button_drawable"
+                android:elevation="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:gravity="center_vertical|left"
+                android:textColor="@color/toggle_button_text"
+                android:textOff="@string/start_workout_button"
+                android:textStyle="bold"
+                android:translationZ="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+    </Toolbar>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/exerciseList"
+        android:name="com.example.henrique.workout.fragments.WorkoutPlanFragment"
+        android:layout_width="match_parent"
+        android:layout_height="449dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:listitem="@layout/item_exercise" />
+
+</android.support.constraint.ConstraintLayout>

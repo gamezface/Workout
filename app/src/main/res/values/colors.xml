@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#E02239</color>
+    <color name="colorPrimaryDark">#BF1D31</color>
+    <color name="colorAccent">#E02239</color>
+    <color name="purple">#5B22E0</color>
+    <color name="blue">#22BBE0</color>
+    <color name="deep_purple">#22E08A</color>
+    <color name="pink">#E022AB</color>
+
+    <array name="defaultPaletteColor">
+        <item>@color/colorPrimary</item>
+        <item>@color/purple</item>
+        <item>@color/blue</item>
+        <item>@color/deep_purple</item>
+        <item>@color/pink</item>
+    </array>
+</resources>

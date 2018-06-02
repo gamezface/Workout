@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <AutoCompleteTextView
+        android:id="@+id/exercise_name"
+        android:layout_width="280dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:drawablePadding="8dp"
+        android:ems="10"
+        android:hint="@string/exercise_dialog_hint"
+        android:nextFocusForward="@+id/sets"
+        android:inputType="textPersonName"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/body_part_spinner"
+        android:layout_width="280dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exercise_name" />
+
+
+    <TextView
+        android:id="@+id/weightText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/exercise_dialog_weight"
+        app:layout_constraintBottom_toBottomOf="@+id/weight"
+        app:layout_constraintEnd_toEndOf="@+id/body_part_spinner"
+        app:layout_constraintTop_toTopOf="@+id/weight"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/weight"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="8dp"
+        android:ems="2"
+        android:textCursorDrawable="@drawable/custom_cursor"
+        android:fontFamily="@font/poppins_semibold"
+        android:inputType="number"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp"
+        android:paddingTop="0dp"
+        android:gravity="center_horizontal"
+        android:paddingBottom="0dp"
+        app:layout_constraintEnd_toStartOf="@+id/weightText"
+        app:layout_constraintTop_toBottomOf="@+id/body_part_spinner" />
+
+    <TextView
+        android:id="@+id/setsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/exercise_dialog_reps"
+        app:layout_constraintBottom_toBottomOf="@+id/sets"
+        app:layout_constraintEnd_toStartOf="@+id/weight"
+        app:layout_constraintHorizontal_bias="0.159"
+        app:layout_constraintStart_toEndOf="@+id/sets"
+        app:layout_constraintTop_toTopOf="@+id/sets"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/sets"
+        android:layout_width="32dp"
+        android:nextFocusForward="@+id/reps"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="36dp"
+        android:gravity="center_horizontal"
+        android:layout_marginStart="36dp"
+        android:textCursorDrawable="@drawable/custom_cursor"
+        android:layout_marginTop="8dp"
+        android:ems="2"
+        android:fontFamily="@font/poppins_semibold"
+        android:inputType="number"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/repsText"
+        app:layout_constraintTop_toBottomOf="@+id/body_part_spinner" />
+
+    <EditText
+        android:id="@+id/reps"
+        android:layout_width="32dp"
+        android:nextFocusForward="@+id/weight"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="2"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:textCursorDrawable="@drawable/custom_cursor"
+        android:fontFamily="@font/poppins_semibold"
+        android:inputType="number"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/body_part_spinner"
+        app:layout_constraintTop_toBottomOf="@+id/body_part_spinner" />
+
+    <TextView
+        android:id="@+id/repsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:text="@string/exercise_dialog_sets"
+        app:layout_constraintBottom_toBottomOf="@+id/reps"
+        app:layout_constraintStart_toEndOf="@+id/reps"
+        app:layout_constraintTop_toTopOf="@+id/reps"
+        app:layout_constraintVertical_bias="0.75" />
+
+</android.support.constraint.ConstraintLayout>

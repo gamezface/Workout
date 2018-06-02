@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.daimajia.swipe.SwipeLayout
+    xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipe"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    swipe:leftEdgeSwipeOffset="0dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    swipe:rightEdgeSwipeOffset="0dp">
+
+    <LinearLayout
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:tag="Bottom3"
+        android:weightSum="10">
+
+        <ImageButton
+            android:id="@+id/delete_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_delete_black_24dp"
+            android:background="@drawable/flag_transparent"
+            />
+
+    </LinearLayout>
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/exerciseName"
+            android:layout_width="wrap_content"
+            android:layout_height="31dp"
+            android:layout_margin="@dimen/text_margin"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:color="#212121"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Leg Press"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/exerciseDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:text="TextView"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exerciseName" />
+
+        <TextView
+            android:id="@+id/targetMuscle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+</com.daimajia.swipe.SwipeLayout>

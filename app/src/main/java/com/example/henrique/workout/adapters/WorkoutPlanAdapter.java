@@ -1,6 +1,5 @@
 package com.example.henrique.workout.adapters;
 
-import android.app.Activity;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
@@ -8,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,7 +130,7 @@ public class WorkoutPlanAdapter extends RecyclerSwipeAdapter<WorkoutPlanAdapter.
         Fragment masterDetailFragment = new WorkoutPlanFragment();
         masterDetailFragment.setArguments(bundle);
         mFragmentTransaction.addToBackStack(null);
-        mFragmentTransaction.setCustomAnimations(R.anim.slide_in,R.anim.slide_out,R.anim.slide_out,R.anim.slide_in);
+        mFragmentTransaction.setCustomAnimations(R.anim.slide_in_right,R.anim.slide_out_right,R.anim.slide_in_left,R.anim.slide_out_left);
         mFragmentTransaction.replace(R.id.fragment_container, masterDetailFragment).commit();
     }
 

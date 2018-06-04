@@ -33,7 +33,7 @@ public class LogInActivity extends AppCompatActivity {
             phoneNumber.setError(getResources().getString(R.string.invalid_phone_number));
         } else{
             Intent intent = new Intent(LogInActivity.this, PINActivity.class);
-            overridePendingTransition(R.anim.slide_in,R.anim.slide_out);
+            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
             intent.putExtra("PHONE_NUMBER",this.ccp.getFormattedFullNumber());
             intent.putExtra("PHONE_NUMBER_UNFORMATTTED",this.ccp.getFullNumberWithPlus());
             startActivity(intent);

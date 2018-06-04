@@ -29,7 +29,7 @@
     <string name="popupmenu_edit">Edit</string>
     <string name="popupmenu_share">Share</string>
     <string name="popupmenu_delete">Delete</string>
-    <string name="resend_code">Didn't receive the code?</string>
+    <string name="resend_code">Didn\'t receive the code?</string>
     <string name="resend_code_button">Re-send SMS</string>
     <string name="verification_code">Verification Code</string>
     <string name="pin_instruction">Please type the code sent to</string>

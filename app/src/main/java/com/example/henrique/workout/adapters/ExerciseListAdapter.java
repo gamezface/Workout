@@ -30,7 +30,7 @@ public class ExerciseListAdapter extends RecyclerSwipeAdapter<ExerciseListAdapte
         TextView exerciseName;
         TextView exerciseDescription;
         TextView targetMuscle;
-        SwipeLayout swipeLayout;
+        public SwipeLayout swipeLayout;
         ImageButton buttonDelete;
 
         public SimpleViewHolder(View itemView) {
@@ -42,6 +42,45 @@ public class ExerciseListAdapter extends RecyclerSwipeAdapter<ExerciseListAdapte
             targetMuscle = itemView.findViewById(R.id.targetMuscle);
         }
 
+        public TextView getExerciseName() {
+            return exerciseName;
+        }
+
+        public void setExerciseName(TextView exerciseName) {
+            this.exerciseName = exerciseName;
+        }
+
+        public TextView getExerciseDescription() {
+            return exerciseDescription;
+        }
+
+        public void setExerciseDescription(TextView exerciseDescription) {
+            this.exerciseDescription = exerciseDescription;
+        }
+
+        public TextView getTargetMuscle() {
+            return targetMuscle;
+        }
+
+        public void setTargetMuscle(TextView targetMuscle) {
+            this.targetMuscle = targetMuscle;
+        }
+
+        public SwipeLayout getSwipeLayout() {
+            return swipeLayout;
+        }
+
+        public void setSwipeLayout(SwipeLayout swipeLayout) {
+            this.swipeLayout = swipeLayout;
+        }
+
+        public ImageButton getButtonDelete() {
+            return buttonDelete;
+        }
+
+        public void setButtonDelete(ImageButton buttonDelete) {
+            this.buttonDelete = buttonDelete;
+        }
     }
     private final List<Exercise> items;
     private Context mContext;

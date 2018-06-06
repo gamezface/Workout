@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.henrique.workout">
 
     <application
@@ -11,7 +12,6 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.HomescreenActivity"
-            android:windowSoftInputMode="adjustPan"
             android:label="@string/app_name" />
 
         <meta-data
@@ -33,7 +33,18 @@
         <activity
             android:name=".Calendar"
             android:label="@string/title_activity_calendar"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".activities.WorkoutPlanShare">
+            <intent-filter android:autoVerify="true"
+                tools:targetApi="23">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="v8z88.app.goo.gl" android:scheme="https"/>
+                <data android:host="workout-a4d9c.firebaseio.com" android:scheme="http"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

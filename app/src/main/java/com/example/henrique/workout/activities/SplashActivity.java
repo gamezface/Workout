@@ -15,11 +15,17 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 public class SplashActivity extends AppCompatActivity {
+    static boolean calledAlready = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
+        if (!calledAlready) {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            calledAlready = true;
+        }
         setContentView(R.layout.splash);
         Handler handler = new Handler();
         handler.postDelayed(() -> showHomescreen(), 2000);

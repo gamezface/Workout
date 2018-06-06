@@ -52,7 +52,6 @@ public class WorkoutListFragment extends Fragment {
     EditText recyclerFilter;
     WorkoutPlanAdapter workoutPlanAdapter;
     ChildEventListener dataListener;
-    ChildEventListener removeListener;
     DatabaseReference ref;
 
     // TODO: Rename and change types and number of parameters
@@ -112,8 +111,10 @@ public class WorkoutListFragment extends Fragment {
             }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+            public void onChildRemoved(DataSnapshot snapshot) {
+                int index = getIndexForKey(snapshot.getKey());
+                workouts.remove(index);
+                workoutPlanAdapter.notifyItemRemoved(index);
             }
 
             @Override
@@ -130,38 +131,7 @@ public class WorkoutListFragment extends Fragment {
                 Log.e("FirebaseReadError","The read failed: " + error.getCode());
             }
         };
-        removeListener = new ChildEventListener(){
-            @Override
-            public void onChildRemoved(DataSnapshot snapshot) {
-                int index = getIndexForKey(snapshot.getKey());
-                workouts.remove(index);
-                workoutPlanAdapter.notifyItemRemoved(index);
-            }
-
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-        };
         ref.addChildEventListener(dataListener);
-        ref.addChildEventListener(removeListener);
     }
 
 
@@ -200,11 +170,10 @@ public class WorkoutListFragment extends Fragment {
 
     public void onPause(){
         super.onPause();
-        ref.removeEventListener(removeListener);
+        ref.removeEventListener(dataListener);
     }
 
     private int getIndexForKey(String key) {
-        Log.d("BATATA",key);
         int index = 0;
         for (WorkoutPlan workouts : workouts) {
             if (workouts.getWorkoutPlanId().equals(key)) {

@@ -34,10 +34,13 @@
     <string name="verification_code">Verification Code</string>
     <string name="pin_instruction">Please type the code sent to</string>
     <string name="title_activity_calendar">Calendar</string>
+    <string name="share_workout_message">Send this link to anyone to share your workout plan:</string>
+    <string name="share_workout_title">Share workout</string>
+    <string name="dialog_close">Close</string>
+    <string name="clipboard_copy">Copy link</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
 
     <array name="body_parts">
         <item>Abdominals</item>

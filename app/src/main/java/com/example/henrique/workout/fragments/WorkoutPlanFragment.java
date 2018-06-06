@@ -1,22 +1,36 @@
 package com.example.henrique.workout.fragments;
 
+import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.Toolbar;
 
@@ -25,6 +39,13 @@ import com.example.henrique.workout.adapters.ExerciseListAdapter;
 import com.example.henrique.workout.adapters.WorkoutPlanAdapter;
 import com.example.henrique.workout.models.Exercise;
 import com.example.henrique.workout.models.WorkoutPlan;
+import com.example.henrique.workout.utils.UrlBuilder;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +70,8 @@ public class WorkoutPlanFragment extends Fragment {
     ImageButton backButton;
     ImageButton moreButton;
     Toolbar toolbar;
+    Uri shortLink;
+    WorkoutPlan workoutPlan;
     ToggleButton workoutToggleButton;
     // TODO: Rename and change types and number of parameters
     public static WorkoutListFragment newInstance() {
@@ -60,6 +83,9 @@ public class WorkoutPlanFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        workoutPlan = bundle.getParcelable("WORKOUT_PLAN");
+        buildUrl();
     }
 
     @Override
@@ -67,8 +93,6 @@ public class WorkoutPlanFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_workoutplan_list, container, false);
-        Bundle bundle = getArguments();
-        WorkoutPlan workoutPlan = bundle.getParcelable("WORKOUT_PLAN");
         initVariables(rootView);
         recyclerViewSetup(this.exerciseList,workoutPlan);
         moreButton.setOnClickListener( l -> showPopup(l));
@@ -97,6 +121,77 @@ public class WorkoutPlanFragment extends Fragment {
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.actions_workoutplan, popup.getMenu());
         popup.show();
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch(item.getItemId()){
+                    case R.id.share:
+                        shareDialogBuilder(shortLink.toString());
+                        return true;
+                    case R.id.delete:
+                        return true;
+                    case R.id.edit:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+    }
+    public void buildUrl(){
+        UrlBuilder builder = new UrlBuilder();
+        Uri longUri = builder.buildWorkoutUrl(this.workoutPlan.getWorkoutPlanId());
+        Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLongLink(longUri)
+                .buildShortDynamicLink()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful())
+                        shortLink = task.getResult().getShortLink();
+
+                });
+    }
+
+    public void shareDialogBuilder(String uri){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        alertDialog.setTitle(R.string.share_workout_title);
+        alertDialog.setMessage(getResources().getString(R.string.share_workout_message));
+        final EditText input = setupInputDialog(uri);
+        alertDialog.setView(input);
+        ImageView qrCode = new ImageView(getContext());
+        qrCode.setImageBitmap(UrlBuilder.generateQRCode(uri));
+        alertDialog.setView(qrCode);
+        alertDialog.setPositiveButton(R.string.clipboard_copy, (dialog, which) -> {
+            ClipboardManager clipboard = (ClipboardManager) this.getContext().getSystemService(getContext().CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("URI", uri);
+            clipboard.setPrimaryClip(clip);
+        });
+        alertDialog.setNegativeButton(R.string.dialog_close,(dialog,which) -> dialog.cancel());
+        AlertDialog dialog = alertDialog.create();
+        dialog.setOnShowListener(arg0 -> {
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+        });
+        dialog.show();
+    }
+
+    public EditText setupInputDialog(String uri){
+        EditText input = new EditText(getContext());
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        input.setText(uri);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(8,8,8,8);
+        input.setLayoutParams(params);
+        input.setInputType(InputType.TYPE_NULL);
+        input.setSelectAllOnFocus(true);
+        input.setMaxLines(1);
+        input.setHorizontallyScrolling(true);
+        input.setFilters(new InputFilter[] {
+                (src, start, end, dst, dstart, dend) -> src.length() < 1 ? dst.subSequence(dstart, dend) : ""
+        });
+        return input;
     }
 
     public void toggleToolbarColors(int toolBarColor, int imageButtonColor, int titleColor){

@@ -28,10 +28,11 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="e02239" />
-                            <entry key="outputName" value="ic_more_vert_black_24dp" />
+                            <entry key="outputName" value="ic_qr_code" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="C:\Users\Henrique\Downloads\baseline-arrow_back_ios-24px.svg" />
+                            <entry key="sourceFile" value="C:\Users\Henrique\Downloads\qr-code (1).svg" />
                           </map>
                         </option>
                       </PersistentState>

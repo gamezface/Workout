@@ -165,7 +165,7 @@
             android:background="@drawable/flag_transparent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:onClick="createWorkout"
+            android:onClick="saveWorkout"
             app:srcCompat="@drawable/ic_check_black_24dp" />
 
     </android.support.constraint.ConstraintLayout>
@@ -199,9 +199,10 @@
 
     </android.support.constraint.ConstraintLayout>
 
-    <com.example.henrique.workout.models.EmptyRecyclerView
+    <com.alberoneramos.workout.models.EmptyRecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
+
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintStart_toStartOf="parent"

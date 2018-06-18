@@ -1,6 +1,7 @@
 <com.daimajia.swipe.SwipeLayout
     xmlns:swipe="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipe"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -30,24 +31,24 @@
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="96dp"
-        android:elevation="8dp"
-        android:background="?android:selectableItemBackground">
+        android:layout_height="wrap_content"
+        android:background="?android:selectableItemBackground"
+        android:elevation="8dp">
 
         <TextView
             android:id="@+id/workoutName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginStart="40dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins_semibold"
             android:text="Name"
+            android:gravity="center_vertical"
             android:textColor="#212121"
             android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/color_ellipse"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -93,5 +94,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/color_ellipse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/workoutName"
+            swipe:srcCompat="@drawable/color_ellipse" />
     </android.support.constraint.ConstraintLayout>
 </com.daimajia.swipe.SwipeLayout>

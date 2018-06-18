@@ -24,6 +24,7 @@
     <string name="exercise_dialog_sets">sets</string>
     <string name="exercise_dialog_weight">Kg</string>
     <string name="exercise_dialog_confirm">Add Exercise</string>
+    <string name="exercise_dialog_edit">Edit Exercise</string>
     <string name="cancel">Cancel</string>
     <string name="invalid_phone_number">Invalid phone number</string>
     <string name="popupmenu_edit">Edit</string>
@@ -38,6 +39,11 @@
     <string name="share_workout_title">Share workout</string>
     <string name="dialog_close">Close</string>
     <string name="clipboard_copy">Copy link</string>
+    <string name="title_qr_scanner">Scan QR</string>
+    <string name="delete_workout_dialog_message">This will permanently delete this workout.</string>
+    <string name="delete_workout_dialog_title">Delete Workout?</string>
+    <string name="dialog_delete">Delete</string>
+    <string name="workout_not_found">Could not find Workout.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

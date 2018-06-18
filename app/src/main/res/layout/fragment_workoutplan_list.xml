@@ -30,8 +30,8 @@
 
             <TextView
                 android:id="@+id/workoutTitle"
-                android:layout_width="147dp"
-                android:layout_height="29dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -40,12 +40,25 @@
                 android:elevation="4dp"
                 android:fontFamily="@font/poppins_semibold"
                 android:gravity="center"
+                android:maxLines="1"
+                android:maxWidth="152dp"
                 android:text="Workout Name"
                 android:textColor="#212121"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/color_ellipse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toEndOf="@+id/workoutTitle"
+                app:layout_constraintTop_toTopOf="@+id/workoutTitle"
+                app:srcCompat="@drawable/color_ellipse" />
 
             <ImageButton
                 android:id="@+id/back"
@@ -84,15 +97,15 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:textOn="@string/pause_workout_button"
                 android:background="@drawable/toggle_button_background"
                 android:drawableRight="@drawable/toggle_button_drawable"
                 android:elevation="8dp"
+                android:gravity="center_vertical|left"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:gravity="center_vertical|left"
                 android:textColor="@color/toggle_button_text"
                 android:textOff="@string/start_workout_button"
+                android:textOn="@string/pause_workout_button"
                 android:textStyle="bold"
                 android:translationZ="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -104,7 +117,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/exerciseList"
-        android:name="com.example.henrique.workout.fragments.WorkoutPlanFragment"
+        android:name="com.alberoneramos.workout.fragments.WorkoutPlanFragment"
         android:layout_width="match_parent"
         android:layout_height="449dp"
         app:layout_constraintStart_toStartOf="parent"

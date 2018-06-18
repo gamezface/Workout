@@ -9,4 +9,8 @@
         android:id="@+id/navigation_calendar"
         android:icon="@drawable/ic_date_range_black_24dp"
         android:title="@string/title_calendar" />
+    <item
+        android:id="@+id/navigation_qr_scanner"
+        android:icon="@drawable/ic_qr_code"
+        android:title="@string/title_qr_scanner" />
 </menu>

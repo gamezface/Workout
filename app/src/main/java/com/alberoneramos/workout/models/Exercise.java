@@ -4,15 +4,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Exercise implements Parcelable{
+    public static final int CHEST = 0;
     public static final int ABDOMINALS = 1;
     public static final int CALVES = 2;
-    public static final int CHEST = 3;
-    public static final int LATS = 4;
-    public static final int MIDDLEBACK = 5;
-    public static final int NECK = 6;
-    public static final int QUADRICEPS = 7;
-    public static final int TRICEPS = 8;
-    public static final int BICEPS = 9;
+    public static final int LATS = 3;
+    public static final int MIDDLEBACK = 4;
+    public static final int NECK = 5;
+    public static final int QUADRICEPS = 6;
+    public static final int TRICEPS = 7;
+    public static final int BICEPS = 8;
 
     private int targetMuscle;
     private int weight;

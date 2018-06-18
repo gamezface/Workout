@@ -95,16 +95,7 @@ public class WorkoutPlanShare extends AppCompatActivity {
     }
 
     public void recyclerViewSetup(RecyclerView exerciseList,WorkoutPlan workoutPlan){
-        ExerciseListAdapter adapter = new ExerciseListAdapter(this,workoutPlan.getExercises()){
-            @Override
-            public void onBindViewHolder(SimpleViewHolder holder, int position) {
-                Exercise item = getItems().get(position);
-                holder.getSwipeLayout().setRightSwipeEnabled(false);
-                holder.getExerciseName().setText(item.getExerciseName());
-                holder.getExerciseDescription().setText(item.getSets() + " sets x " + item.getRepetitions() + " reps x " + item.getWeight() + " kg");
-                holder.getTargetMuscle().setText(item.getStringTargetMuscle());
-            }
-        };
+        ExerciseListAdapter adapter = new ExerciseListAdapter(this,workoutPlan.getExercises());
         exerciseList.setAdapter(adapter);
         exerciseList.setLayoutManager(new LinearLayoutManager(this));
     }

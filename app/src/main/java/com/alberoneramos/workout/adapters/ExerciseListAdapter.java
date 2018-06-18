@@ -17,22 +17,22 @@ import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.alberoneramos.workout.R;
 import com.alberoneramos.workout.models.Exercise;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
-public class ExerciseListAdapter extends RecyclerSwipeAdapter<ExerciseListAdapter.SimpleViewHolder> {
+public class ExerciseListAdapter extends RecyclerView.Adapter<ExerciseListAdapter.SimpleViewHolder> {
 
     public class SimpleViewHolder extends RecyclerView.ViewHolder {
         TextView exerciseName;
         TextView exerciseDescription;
         TextView targetMuscle;
         public SwipeLayout swipeLayout;
-        ImageButton buttonDelete;
 
         public SimpleViewHolder(View itemView) {
             super(itemView);
             swipeLayout = itemView.findViewById(R.id.swipe);
-            buttonDelete = itemView.findViewById(R.id.delete_button);
             exerciseName = itemView.findViewById(R.id.exerciseName);
             exerciseDescription = itemView.findViewById(R.id.exerciseDescription);
             targetMuscle = itemView.findViewById(R.id.targetMuscle);
@@ -68,14 +68,6 @@ public class ExerciseListAdapter extends RecyclerSwipeAdapter<ExerciseListAdapte
 
         public void setSwipeLayout(SwipeLayout swipeLayout) {
             this.swipeLayout = swipeLayout;
-        }
-
-        public ImageButton getButtonDelete() {
-            return buttonDelete;
-        }
-
-        public void setButtonDelete(ImageButton buttonDelete) {
-            this.buttonDelete = buttonDelete;
         }
     }
     private final List<Exercise> items;
@@ -129,18 +121,8 @@ public class ExerciseListAdapter extends RecyclerSwipeAdapter<ExerciseListAdapte
     @Override
     public void onBindViewHolder(SimpleViewHolder holder, int position) {
         Exercise item = items.get(position);
-        holder.swipeLayout.addSwipeListener(new SimpleSwipeListener() {
-            @Override
-            public void onOpen(SwipeLayout layout) {
-                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(layout.findViewById(R.id.delete_button));
-            }
-        });
-        holder.buttonDelete.setOnClickListener(view -> {
-            items.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, items.size());
-        });
         holder.exerciseName.setText(item.getExerciseName());
+        holder.swipeLayout.setRightSwipeEnabled(false);
         holder.exerciseDescription.setText(item.getSets() + " sets x " + item.getRepetitions() + " reps x " + item.getWeight() + " kg");
         holder.targetMuscle.setText(item.getStringTargetMuscle());
     }
@@ -157,10 +139,6 @@ public class ExerciseListAdapter extends RecyclerSwipeAdapter<ExerciseListAdapte
         return new SimpleViewHolder(v);
     }
 
-    @Override
-    public int getSwipeLayoutResourceId(int position) {
-        return R.id.swipe;
-    }
 
     public List<Exercise> getItems(){
         return this.items;

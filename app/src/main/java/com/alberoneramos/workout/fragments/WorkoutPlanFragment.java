@@ -31,6 +31,8 @@ import android.widget.Toolbar;
 import com.alberoneramos.workout.R;
 import com.alberoneramos.workout.activities.AddWorkoutActivity;
 import com.alberoneramos.workout.adapters.ExerciseListAdapter;
+import com.alberoneramos.workout.adapters.ExerciseListSetsAdapter;
+import com.alberoneramos.workout.models.Exercise;
 import com.alberoneramos.workout.models.WorkoutPlan;
 import com.alberoneramos.workout.utils.UrlBuilder;
 import com.google.android.gms.tasks.Task;
@@ -43,16 +45,22 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
 
+import java.util.List;
+
+import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
+
 
 public class WorkoutPlanFragment extends Fragment {
 
     private static final int EDIT_CODE = 31;
+    private StickyHeaderDecoration decor;
 
     private OnFragmentInteractionListener mListener;
     public WorkoutPlanFragment() {
         // Required empty public constructor
     }
     RecyclerView exerciseList;
+    RecyclerView exerciseListRepetition;
     TextView title;
     ImageButton backButton;
     ImageButton moreButton;
@@ -76,22 +84,33 @@ public class WorkoutPlanFragment extends Fragment {
         buildUrl();
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_workoutplan_list, container, false);
         initVariables(rootView);
-        recyclerViewSetup(this.exerciseList,workoutPlan);
+        recyclerViewSetup();
         moreButton.setOnClickListener( l -> showPopup(l));
         backButton.setOnClickListener(l -> getActivity().getSupportFragmentManager().popBackStack());
         workoutToggleButton.setOnCheckedChangeListener(((buttonView, isChecked) -> {
-            if (isChecked)
-                toggleToolbarColors(getResources().getColor(R.color.colorPrimary),getResources().getColor(android.R.color.white),
-                                    getResources().getColor(android.R.color.white));
-            else
+            if (isChecked) {
+                toggleToolbarColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(android.R.color.white),
+                        getResources().getColor(android.R.color.white));
+                exerciseListRepetition.setVisibility(View.VISIBLE);
+                exerciseListRepetition.invalidate();
+                exerciseList.setVisibility(View.GONE);
+                exerciseList.invalidate();
+            }else{
                 toggleToolbarColors(getResources().getColor(android.R.color.white), getResources().getColor(R.color.colorPrimary),
                                     getResources().getColor(android.R.color.black));
+                exerciseListRepetition.setVisibility(View.GONE);
+                exerciseList.setVisibility(View.VISIBLE);
+                exerciseListRepetition.invalidate();
+                exerciseList.invalidate();
+            }
         }));
         title.setText(workoutPlan.getName());
         colorEllipse.setColorFilter(Color.parseColor(String.format("#%06X", (0xFFFFFF & workoutPlan.getColorId()))));
@@ -108,7 +127,7 @@ public class WorkoutPlanFragment extends Fragment {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     workoutPlan = dataSnapshot.getValue(WorkoutPlan.class);
-                    recyclerViewSetup(exerciseList,workoutPlan);
+                    recyclerViewSetup();
                     colorEllipse.setColorFilter(Color.parseColor(String.format("#%06X", (0xFFFFFF & workoutPlan.getColorId()))));
                     title.setText(workoutPlan.getName());
                     Log.d("Montanha",String.valueOf(workoutPlan.getName()));
@@ -123,8 +142,14 @@ public class WorkoutPlanFragment extends Fragment {
 
     }
 
-    public void recyclerViewSetup(RecyclerView exerciseList,WorkoutPlan workoutPlan){
-        exerciseList.setAdapter(new ExerciseListAdapter(getContext(),workoutPlan.getExercises()));
+    public void recyclerViewSetup(){
+        List<Exercise> exercises = workoutPlan.getExercises();
+        exerciseList.setAdapter(new ExerciseListAdapter(getContext(),exercises));
+        ExerciseListSetsAdapter adapter = new ExerciseListSetsAdapter(getContext(),exercises);
+        exerciseListRepetition.setAdapter(adapter);
+        exerciseListRepetition.setLayoutManager(new LinearLayoutManager(getContext()));
+        decor = new StickyHeaderDecoration(adapter);
+        exerciseListRepetition.addItemDecoration(decor);
         exerciseList.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
@@ -246,6 +271,7 @@ public class WorkoutPlanFragment extends Fragment {
 
     public void initVariables(View rootView){
         this.exerciseList = rootView.findViewById(R.id.exerciseList);
+        this.exerciseListRepetition = rootView.findViewById(R.id.exerciseListRepetition);
         this.backButton = rootView.findViewById(R.id.back);
         this.toolbar = rootView.findViewById(R.id.toolbar);
         this.workoutToggleButton = rootView.findViewById(R.id.toggleWorkout);

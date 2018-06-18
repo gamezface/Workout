@@ -1,1 +1,1 @@
-include ':app',':inlinecolorpicker'
+include ':app', ':inlinecolorpicker'

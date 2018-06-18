@@ -39,6 +39,7 @@ dependencies {
     implementation 'com.hbb20:ccp:2.2.0'
     implementation 'com.github.GoodieBag:Pinview:v1.3'
     implementation project(':inlinecolorpicker')
+    implementation 'com.github.edubarr:header-decor:0.2.7'
     implementation "com.daimajia.swipelayout:library:1.2.0@aar"
     implementation 'com.github.DavidProdinger:weekdays-selector:1.0.5'
     implementation 'com.daimajia.easing:library:2.0@aar'

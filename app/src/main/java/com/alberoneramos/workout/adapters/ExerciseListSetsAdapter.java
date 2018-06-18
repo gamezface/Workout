@@ -67,7 +67,6 @@ public class ExerciseListSetsAdapter extends RecyclerSwipeAdapter<ExerciseListSe
         List<Exercise> singleSets = new ArrayList<Exercise>();
         List<String> headers = new ArrayList<String>();
         int totalSets = 0;
-        Log.d("BATATA",String.valueOf(exercises.size()));
         for(Exercise exercise : exercises){
             for(int i = 0 ; i < exercise.getSets() ; i++ ) {
                 Exercise set = new Exercise(exercise);
@@ -131,7 +130,6 @@ public class ExerciseListSetsAdapter extends RecyclerSwipeAdapter<ExerciseListSe
 
     @Override
     public long getHeaderId(int position) {
-        Log.d("BATATA",String.valueOf(position));
         if(position == 0)
             return 0;
         else

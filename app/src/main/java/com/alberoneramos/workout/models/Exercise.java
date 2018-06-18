@@ -76,7 +76,7 @@ public class Exercise implements Parcelable{
             case TRICEPS:
                 return "Triceps";
             case BICEPS:
-                return "Triceps";
+                return "Biceps";
             default:
                 return "Chest";
         }

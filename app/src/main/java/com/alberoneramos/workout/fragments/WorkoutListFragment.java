@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.alberoneramos.workout.R;
 import com.alberoneramos.workout.adapters.WorkoutPlanAdapter;
+import com.alberoneramos.workout.models.EmptyRecyclerView;
 import com.alberoneramos.workout.models.WorkoutPlan;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -34,7 +35,7 @@ public class WorkoutListFragment extends Fragment {
     public WorkoutListFragment() {
     }
 
-    RecyclerView workoutList;
+    EmptyRecyclerView workoutList;
     TextView emptyText;
     List<WorkoutPlan> workouts;
     EditText recyclerFilter;
@@ -129,6 +130,7 @@ public class WorkoutListFragment extends Fragment {
         workouts = new ArrayList<WorkoutPlan>();
         workoutPlanAdapter = new WorkoutPlanAdapter(getContext(),workouts);
         workoutList.setAdapter(workoutPlanAdapter);
+        workoutList.setEmptyView(emptyText);
         workoutList.setLayoutManager(new LinearLayoutManager(getContext()));
         fetchDataFromFirebase();
     }

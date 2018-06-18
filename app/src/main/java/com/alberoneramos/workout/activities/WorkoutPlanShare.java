@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.alberoneramos.workout.R;
 import com.alberoneramos.workout.adapters.ExerciseListAdapter;
+import com.alberoneramos.workout.models.EmptyRecyclerView;
 import com.alberoneramos.workout.models.Exercise;
 import com.alberoneramos.workout.models.WorkoutPlan;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,9 +26,10 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 
 public class WorkoutPlanShare extends AppCompatActivity {
 
-    RecyclerView exerciseList;
+    EmptyRecyclerView exerciseList;
     TextView title;
     ImageButton backButton;
+    TextView emptyText;
     DatabaseReference ref;
     ImageButton addWorkoutButton;
     WorkoutPlan workoutPlan;
@@ -54,7 +56,7 @@ public class WorkoutPlanShare extends AppCompatActivity {
                     else{
                         exerciseList = findViewById(R.id.exerciseList);
                         title.setText(workoutPlan.getName());
-                        recyclerViewSetup(exerciseList,workoutPlan);
+                        recyclerViewSetup();
                     }
                 }
 
@@ -91,12 +93,14 @@ public class WorkoutPlanShare extends AppCompatActivity {
     public void initVariables(){
         this.addWorkoutButton = findViewById(R.id.add_workout);
         this.title = findViewById(R.id.workoutTitle);
+        this.emptyText = findViewById(R.id.empty);
         this.backButton = findViewById(R.id.back);
     }
 
-    public void recyclerViewSetup(RecyclerView exerciseList,WorkoutPlan workoutPlan){
+    public void recyclerViewSetup(){
         ExerciseListAdapter adapter = new ExerciseListAdapter(this,workoutPlan.getExercises());
         exerciseList.setAdapter(adapter);
+        exerciseList.setEmptyView(emptyText);
         exerciseList.setLayoutManager(new LinearLayoutManager(this));
     }
 }

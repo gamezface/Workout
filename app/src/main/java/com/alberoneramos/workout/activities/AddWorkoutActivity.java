@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.dpro.widgets.WeekdaysPicker;
 import com.alberoneramos.workout.R;
@@ -36,6 +37,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements IAddExercis
     Button addExercise;
     WorkoutPlan workoutPlan;
     EmptyRecyclerView exerciseList;
+    TextView emptyText;
     ExerciseListAddAdapter adapter;
 
     @Override
@@ -71,8 +73,9 @@ public class AddWorkoutActivity extends AppCompatActivity implements IAddExercis
 
 
     public void recyclerViewSetup(){
+        emptyText = findViewById(R.id.empty);
         exerciseList.setAdapter(this.adapter);
-        exerciseList.setEmptyView(findViewById(R.id.empty));
+        exerciseList.setEmptyView(emptyText);
         exerciseList.setLayoutManager(new LinearLayoutManager(this));
     }
 

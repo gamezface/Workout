@@ -1,6 +1,9 @@
-package com.alberoneramos.workout.adapters;
+package com.alberoneramos.workout.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,64 +19,34 @@ import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.alberoneramos.workout.R;
+import com.alberoneramos.workout.dialogs.AddExerciseDialog;
 import com.alberoneramos.workout.models.Exercise;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
-public class ExerciseListAdapter extends RecyclerView.Adapter<ExerciseListAdapter.SimpleViewHolder> {
+public class ExerciseListAddAdapter extends RecyclerSwipeAdapter<ExerciseListAddAdapter.SimpleViewHolder> {
 
     public class SimpleViewHolder extends RecyclerView.ViewHolder {
         TextView exerciseName;
         TextView exerciseDescription;
         TextView targetMuscle;
-        public SwipeLayout swipeLayout;
+        SwipeLayout swipeLayout;
+        ImageButton buttonDelete;
 
-        public SimpleViewHolder(View itemView) {
+        SimpleViewHolder(View itemView) {
             super(itemView);
             swipeLayout = itemView.findViewById(R.id.swipe);
+            buttonDelete = itemView.findViewById(R.id.delete_button);
             exerciseName = itemView.findViewById(R.id.exerciseName);
             exerciseDescription = itemView.findViewById(R.id.exerciseDescription);
             targetMuscle = itemView.findViewById(R.id.targetMuscle);
         }
 
-        public TextView getExerciseName() {
-            return exerciseName;
-        }
-
-        public void setExerciseName(TextView exerciseName) {
-            this.exerciseName = exerciseName;
-        }
-
-        public TextView getExerciseDescription() {
-            return exerciseDescription;
-        }
-
-        public void setExerciseDescription(TextView exerciseDescription) {
-            this.exerciseDescription = exerciseDescription;
-        }
-
-        public TextView getTargetMuscle() {
-            return targetMuscle;
-        }
-
-        public void setTargetMuscle(TextView targetMuscle) {
-            this.targetMuscle = targetMuscle;
-        }
-
-        public SwipeLayout getSwipeLayout() {
-            return swipeLayout;
-        }
-
-        public void setSwipeLayout(SwipeLayout swipeLayout) {
-            this.swipeLayout = swipeLayout;
-        }
     }
     private final List<Exercise> items;
     private Context mContext;
 
-    public ExerciseListAdapter(Context context,List<Exercise> items) {
+    public ExerciseListAddAdapter(Context context, List<Exercise> items) {
         this.mContext = context;
         this.items = items;
     }
@@ -119,12 +92,23 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<ExerciseListAdapte
     }
 
     @Override
-    public void onBindViewHolder(SimpleViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SimpleViewHolder holder, int position) {
         Exercise item = items.get(position);
+        holder.swipeLayout.addSwipeListener(new SimpleSwipeListener() {
+            @Override
+            public void onOpen(SwipeLayout layout) {
+                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(layout.findViewById(R.id.delete_button));
+            }
+        });
+        holder.buttonDelete.setOnClickListener(view -> {
+            items.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, items.size());
+        });
         holder.exerciseName.setText(item.getExerciseName());
-        holder.swipeLayout.setRightSwipeEnabled(false);
         holder.exerciseDescription.setText(item.getSets() + " sets x " + item.getRepetitions() + " reps x " + item.getWeight() + " kg");
         holder.targetMuscle.setText(item.getStringTargetMuscle());
+        holder.swipeLayout.getSurfaceView().setOnLongClickListener(pos -> openEditDialog(items.get(position),position));
     }
 
     @Override
@@ -132,6 +116,18 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<ExerciseListAdapte
         return items.size();
     }
 
+    private boolean openEditDialog(Exercise exercise, int position){
+        AddExerciseDialog addExerciseDialog = new AddExerciseDialog();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("EDIT_MODE",true);
+        bundle.putParcelable("EXERCISE",exercise);
+        bundle.putInt("POSITION",position);
+        addExerciseDialog.setArguments(bundle);
+        addExerciseDialog.show(((Activity)mContext).getFragmentManager(),"AddExercise");
+        return true;
+    }
+
+    @NonNull
     @Override
     public SimpleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
@@ -139,13 +135,17 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<ExerciseListAdapte
         return new SimpleViewHolder(v);
     }
 
+    @Override
+    public int getSwipeLayoutResourceId(int position) {
+        return R.id.swipe;
+    }
 
     public List<Exercise> getItems(){
         return this.items;
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
 }

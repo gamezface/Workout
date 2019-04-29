@@ -1,15 +1,14 @@
-package com.alberoneramos.workout.adapters;
+package com.alberoneramos.workout.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.alberoneramos.workout.R;
-import com.alberoneramos.workout.fragments.WorkoutPlanFragment;
+import com.alberoneramos.workout.view.fragment.WorkoutPlanFragment;
 import com.alberoneramos.workout.models.WorkoutPlan;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
@@ -34,9 +33,9 @@ import java.util.List;
 
 public class WorkoutPlanAdapter extends RecyclerSwipeAdapter<WorkoutPlanAdapter.SimpleViewHolder> {
 
-    public class SimpleViewHolder extends RecyclerView.ViewHolder {
-        public TextView workoutName;
-        public TextView numberOfExercises;
+    class SimpleViewHolder extends RecyclerView.ViewHolder {
+        TextView workoutName;
+        TextView numberOfExercises;
         SwipeLayout swipeLayout;
         ImageView colorEllipse;
         ImageButton buttonDelete;
@@ -53,7 +52,6 @@ public class WorkoutPlanAdapter extends RecyclerSwipeAdapter<WorkoutPlanAdapter.
     }
     private List<WorkoutPlan> items;
     private Context mContext;
-    FragmentTransaction mFragmentTransaction;
 
     public WorkoutPlanAdapter(Context context,List<WorkoutPlan> items) {
         this.mContext = context;
@@ -133,7 +131,7 @@ public class WorkoutPlanAdapter extends RecyclerSwipeAdapter<WorkoutPlanAdapter.
     private void openDetailActivity(WorkoutPlan workoutPlan) {
         Bundle bundle = new Bundle();
         FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();
-        mFragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction mFragmentTransaction = fragmentManager.beginTransaction();
         bundle.putParcelable("WORKOUT_PLAN",workoutPlan);
         Fragment masterDetailFragment = new WorkoutPlanFragment();
         masterDetailFragment.setArguments(bundle);
@@ -142,6 +140,7 @@ public class WorkoutPlanAdapter extends RecyclerSwipeAdapter<WorkoutPlanAdapter.
         mFragmentTransaction.replace(R.id.fragment_container, masterDetailFragment).commit();
     }
 
+    @NonNull
     @Override
     public SimpleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
@@ -155,7 +154,7 @@ public class WorkoutPlanAdapter extends RecyclerSwipeAdapter<WorkoutPlanAdapter.
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
 }

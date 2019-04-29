@@ -1,4 +1,4 @@
-package com.alberoneramos.workout.activities;
+package com.alberoneramos.workout.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,6 @@ import com.google.firebase.database.FirebaseDatabase;
 public class SplashActivity extends AppCompatActivity {
     static boolean calledAlready = false;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +26,7 @@ public class SplashActivity extends AppCompatActivity {
         }
         setContentView(R.layout.splash);
         Handler handler = new Handler();
-        handler.postDelayed(() -> showHomescreen(), 2000);
+        handler.postDelayed(this::showHomescreen, 2000);
     }
 
     private void showHomescreen() {
@@ -38,7 +37,7 @@ public class SplashActivity extends AppCompatActivity {
             intent = new Intent(SplashActivity.this, HomescreenActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         } else {
-            intent = new Intent(SplashActivity.this,LogInActivity.class);
+            intent = new Intent(SplashActivity.this, LogInActivity.class);
             Log.d("isLoggedIn", "onAuthStateChanged:signed_out");
         }
         startActivity(intent);

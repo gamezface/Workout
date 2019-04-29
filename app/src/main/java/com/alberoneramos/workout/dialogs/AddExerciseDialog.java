@@ -1,5 +1,6 @@
 package com.alberoneramos.workout.dialogs;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -43,8 +44,10 @@ public class AddExerciseDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_add_exercise, null);
-        initViews(view);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_add_exercise, null);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            initViews(view);
+        }
         builder.setView(view)
                 .setPositiveButton((getArguments() != null && getArguments().getBoolean("EDIT_MODE")) ? R.string.exercise_dialog_edit : R.string.exercise_dialog_confirm, new DialogInterface.OnClickListener() {
                     @Override
@@ -67,11 +70,7 @@ public class AddExerciseDialog extends DialogFragment {
                         AddExerciseDialog.this.getDialog().cancel();
                     }
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        AddExerciseDialog.this.getDialog().cancel();
-                    }
-                });
+                .setNegativeButton(R.string.cancel, (dialog, id) -> AddExerciseDialog.this.getDialog().cancel());
         return builder.create();
     }
 
@@ -90,10 +89,12 @@ public class AddExerciseDialog extends DialogFragment {
         weightText.setText("0");
         if(getArguments() != null && getArguments().getBoolean("EDIT_MODE")){
             Exercise exercise = getArguments().getParcelable("EXERCISE");
-            exerciseName.setText(exercise.getExerciseName());
-            setsText.setText(String.valueOf(exercise.getSets()));
-            repsText.setText(String.valueOf(exercise.getRepetitions()));
-            weightText.setText(String.valueOf(exercise.getWeight()));
+            if (exercise != null) {
+                exerciseName.setText(exercise.getExerciseName());
+                setsText.setText(String.valueOf(exercise.getSets()));
+                repsText.setText(String.valueOf(exercise.getRepetitions()));
+                weightText.setText(String.valueOf(exercise.getWeight()));
+            }
         }
     }
 

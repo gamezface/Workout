@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
-    tools:context=".activities.HomescreenActivity">
+    tools:context=".view.activity.HomescreenActivity">
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

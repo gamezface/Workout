@@ -1,9 +1,8 @@
-package com.alberoneramos.workout.adapters;
+package com.alberoneramos.workout.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,11 +31,11 @@ public class ExerciseListSetsAdapter extends RecyclerSwipeAdapter<ExerciseListSe
         this.items.addAll(items);
     }
 
-    public class SimpleViewHolder extends RecyclerView.ViewHolder {
+    class SimpleViewHolder extends RecyclerView.ViewHolder {
         TextView exerciseName;
         TextView exerciseDescription;
 
-        public SimpleViewHolder(View itemView) {
+        SimpleViewHolder(View itemView) {
             super(itemView);
             exerciseName = itemView.findViewById(R.id.exerciseName);
             exerciseDescription = itemView.findViewById(R.id.exerciseDescription);
@@ -53,26 +52,24 @@ public class ExerciseListSetsAdapter extends RecyclerSwipeAdapter<ExerciseListSe
         }
     }
     private final List<Exercise> items;
-    private Context mContext;
 
     public ExerciseListSetsAdapter(Context context, List<Exercise> items) {
         inflater = LayoutInflater.from(context);
-        this.mContext = context;
-        this.headerPosition = new ArrayList<Integer>();
-        this.headerText = new ArrayList<String>();
+        this.headerPosition = new ArrayList<>();
+        this.headerText = new ArrayList<>();
         this.items = setupSingleSets(items);
     }
 
     private List<Exercise> setupSingleSets(List<Exercise> exercises){
-        List<Exercise> singleSets = new ArrayList<Exercise>();
-        List<String> headers = new ArrayList<String>();
+        List<Exercise> singleSets = new ArrayList<>();
+        List<String> headers = new ArrayList<>();
         int totalSets = 0;
         for(Exercise exercise : exercises){
             for(int i = 0 ; i < exercise.getSets() ; i++ ) {
                 Exercise set = new Exercise(exercise);
                 headerPosition.add(totalSets);
                 headerText.add(exercise.getExerciseName());
-                set.setExerciseName("Set #"+String.valueOf(i+1));
+                set.setExerciseName("Set #"+ (i + 1));
                 singleSets.add(set);
 
             }
@@ -122,7 +119,7 @@ public class ExerciseListSetsAdapter extends RecyclerSwipeAdapter<ExerciseListSe
     }
 
     @Override
-    public void onBindViewHolder(SimpleViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SimpleViewHolder holder, int position) {
         Exercise item = items.get(position);
         holder.exerciseName.setText(item.getExerciseName());
         holder.exerciseDescription.setText( item.getRepetitions() +" reps x " + item.getWeight() + " kg");
@@ -154,15 +151,16 @@ public class ExerciseListSetsAdapter extends RecyclerSwipeAdapter<ExerciseListSe
     }
 
     static class HeaderHolder extends RecyclerView.ViewHolder {
-        public TextView header;
+        TextView header;
 
-        public HeaderHolder(View itemView) {
+        HeaderHolder(View itemView) {
             super(itemView);
 
             header = (TextView) itemView;
         }
     }
 
+    @NonNull
     @Override
     public SimpleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
@@ -180,7 +178,7 @@ public class ExerciseListSetsAdapter extends RecyclerSwipeAdapter<ExerciseListSe
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
 }

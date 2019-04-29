@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/scanner_fragment"
-        android:name="com.alberoneramos.workout.fragments.QRScannerFragment"
+        android:name="com.alberoneramos.workout.view.fragment.QRScannerFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"

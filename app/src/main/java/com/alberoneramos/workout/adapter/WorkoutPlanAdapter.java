@@ -3,12 +3,6 @@ package com.alberoneramos.workout.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +12,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.alberoneramos.workout.R;
+import com.alberoneramos.workout.models.WorkoutPlan;
+import com.alberoneramos.workout.view.fragment.WorkoutPlanFragment;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
-import com.alberoneramos.workout.R;
-import com.alberoneramos.workout.view.fragment.WorkoutPlanFragment;
-import com.alberoneramos.workout.models.WorkoutPlan;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -50,10 +51,11 @@ public class WorkoutPlanAdapter extends RecyclerSwipeAdapter<WorkoutPlanAdapter.
         }
 
     }
+
     private List<WorkoutPlan> items;
     private Context mContext;
 
-    public WorkoutPlanAdapter(Context context,List<WorkoutPlan> items) {
+    public WorkoutPlanAdapter(Context context, List<WorkoutPlan> items) {
         this.mContext = context;
         this.items = items;
     }
@@ -76,9 +78,11 @@ public class WorkoutPlanAdapter extends RecyclerSwipeAdapter<WorkoutPlanAdapter.
             @Override
             public void onAnimationStart(Animation animation) {
             }
+
             @Override
             public void onAnimationRepeat(Animation animation) {
             }
+
             @Override
             public void onAnimationEnd(Animation animation) {
                 row.getLayoutParams().height = initialHeight;
@@ -92,7 +96,7 @@ public class WorkoutPlanAdapter extends RecyclerSwipeAdapter<WorkoutPlanAdapter.
     }
 
 
-    public void updateList(List<WorkoutPlan> list){
+    public void updateList(List<WorkoutPlan> list) {
         this.items = list;
         notifyDataSetChanged();
     }
@@ -114,7 +118,7 @@ public class WorkoutPlanAdapter extends RecyclerSwipeAdapter<WorkoutPlanAdapter.
         });
         holder.buttonDelete.setOnClickListener(view -> {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
-            database.getReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/workouts").child(item.getWorkoutPlanId()).removeValue();
+            database.getReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/workouts").child(item.getWorkoutPlanId()).removeValue();
         });
         String hexColor = String.format("#%06X", (0xFFFFFF & item.getColorId()));
         holder.colorEllipse.setColorFilter(Color.parseColor(hexColor));
@@ -130,13 +134,13 @@ public class WorkoutPlanAdapter extends RecyclerSwipeAdapter<WorkoutPlanAdapter.
 
     private void openDetailActivity(WorkoutPlan workoutPlan) {
         Bundle bundle = new Bundle();
-        FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();
+        FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
         FragmentTransaction mFragmentTransaction = fragmentManager.beginTransaction();
-        bundle.putParcelable("WORKOUT_PLAN",workoutPlan);
+        bundle.putParcelable("WORKOUT_PLAN", workoutPlan);
         Fragment masterDetailFragment = new WorkoutPlanFragment();
         masterDetailFragment.setArguments(bundle);
         mFragmentTransaction.addToBackStack(null);
-        mFragmentTransaction.setCustomAnimations(R.anim.slide_in_right,R.anim.slide_out_right,R.anim.slide_in_left,R.anim.slide_out_left);
+        mFragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right, R.anim.slide_in_left, R.anim.slide_out_left);
         mFragmentTransaction.replace(R.id.fragment_container, masterDetailFragment).commit();
     }
 
@@ -144,7 +148,7 @@ public class WorkoutPlanAdapter extends RecyclerSwipeAdapter<WorkoutPlanAdapter.
     @Override
     public SimpleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_workout,parent, false);
+                .inflate(R.layout.item_workout, parent, false);
         return new SimpleViewHolder(v);
     }
 

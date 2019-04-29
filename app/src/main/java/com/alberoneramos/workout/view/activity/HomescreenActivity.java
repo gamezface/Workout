@@ -2,15 +2,16 @@ package com.alberoneramos.workout.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
 import com.alberoneramos.workout.R;
+import com.alberoneramos.workout.controller.NavigationManager;
 import com.alberoneramos.workout.view.fragment.QRScannerFragment;
 import com.alberoneramos.workout.view.fragment.WorkoutListFragment;
 import com.alberoneramos.workout.view.fragment.CalendarFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomescreenActivity extends AppCompatActivity {
 
@@ -18,13 +19,13 @@ public class HomescreenActivity extends AppCompatActivity {
             = item -> {
         switch (item.getItemId()) {
             case R.id.navigation_home:
-                loadFragment(new WorkoutListFragment());
+                NavigationManager.openFragment(getSupportFragmentManager(),new WorkoutListFragment(),"Home",R.id.fragment_container);
                 return true;
             case R.id.navigation_calendar:
-                loadFragment(new CalendarFragment());
+                NavigationManager.openFragment(getSupportFragmentManager(),new CalendarFragment(),"Home",R.id.fragment_container);
                 return true;
             case R.id.navigation_qr_scanner:
-                loadFragment(new QRScannerFragment());
+                NavigationManager.openFragment(getSupportFragmentManager(),new QRScannerFragment(),"Home",R.id.fragment_container);
                 return true;
         }
         return false;
@@ -32,18 +33,9 @@ public class HomescreenActivity extends AppCompatActivity {
 
 
     public void addWorkout(View view) {
-        Intent intent = new Intent(HomescreenActivity.this, com.alberoneramos.workout.view.activity.AddWorkoutActivity.class);
+        Intent intent = new Intent(HomescreenActivity.this, AddWorkoutActivity.class);
         overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
         startActivity(intent);
-    }
-
-    private void loadFragment(Fragment fragment) {
-        if (fragment != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
-                    .commit();
-        }
     }
 
     @Override

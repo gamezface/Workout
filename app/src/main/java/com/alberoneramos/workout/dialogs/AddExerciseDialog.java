@@ -8,7 +8,6 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import androidx.annotation.RequiresApi;
 
 import com.alberoneramos.workout.R;
 import com.alberoneramos.workout.interfaces.IAddExercise;
@@ -49,26 +50,23 @@ public class AddExerciseDialog extends DialogFragment {
             initViews(view);
         }
         builder.setView(view)
-                .setPositiveButton((getArguments() != null && getArguments().getBoolean("EDIT_MODE")) ? R.string.exercise_dialog_edit : R.string.exercise_dialog_confirm, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        boolean editMode;
-                        Bundle arguments = getArguments();
-                        int position;
-                        if(arguments != null && arguments.containsKey("EDIT_MODE")) {
-                            editMode = arguments.getBoolean("EDIT_MODE");
-                            position = arguments.getInt("POSITION");
-                        } else{
-                            editMode = false;
-                            position = 0;
-                        }
-                        mCallback.onExerciseAdd( new Exercise(bodyPartSpinner.getSelectedItemPosition()+1,
-                                exerciseName.getText().toString(),
-                                Integer.parseInt(setsText.getText().toString()),
-                                Integer.parseInt(repsText.getText().toString()),
-                                Integer.parseInt(weightText.getText().toString())),editMode,position);
-                        AddExerciseDialog.this.getDialog().cancel();
+                .setPositiveButton((getArguments() != null && getArguments().getBoolean("EDIT_MODE")) ? R.string.exercise_dialog_edit : R.string.exercise_dialog_confirm, (dialog, id) -> {
+                    boolean editMode;
+                    Bundle arguments = getArguments();
+                    int position;
+                    if(arguments != null && arguments.containsKey("EDIT_MODE")) {
+                        editMode = arguments.getBoolean("EDIT_MODE");
+                        position = arguments.getInt("POSITION");
+                    } else{
+                        editMode = false;
+                        position = 0;
                     }
+                    mCallback.onExerciseAdd( new Exercise(bodyPartSpinner.getSelectedItemPosition()+1,
+                            exerciseName.getText().toString(),
+                            Integer.parseInt(setsText.getText().toString()),
+                            Integer.parseInt(repsText.getText().toString()),
+                            Integer.parseInt(weightText.getText().toString())),editMode,position);
+                    AddExerciseDialog.this.getDialog().cancel();
                 })
                 .setNegativeButton(R.string.cancel, (dialog, id) -> AddExerciseDialog.this.getDialog().cancel());
         return builder.create();

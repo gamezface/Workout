@@ -5,15 +5,16 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.alberoneramos.workout.R;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.alberoneramos.workout.R;
 import com.goodiebag.pinview.Pinview;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
@@ -97,12 +98,19 @@ public class PINActivity extends AppCompatActivity {
 
         void resendVerificationCode(String phoneNumber, PhoneAuthProvider.ForceResendingToken token) {
             PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                    phoneNumber,60, TimeUnit.SECONDS, activity, mCallbacks, token);
+                    phoneNumber, 60, TimeUnit.SECONDS, activity, mCallbacks, token);
         }
 
         void verifyPhoneNumberWithCode(String verificationId, String code) {
-            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
-            signInWithPhoneAuthCredential(credential);
+            try {
+                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
+                signInWithPhoneAuthCredential(credential);
+            } catch (Exception e) {
+                pin.setValue("");
+                YoYo.with(Techniques.Shake).playOn(findViewById(R.id.pinview));
+                pinErrorText.setText(getResources().getString(R.string.invalid_pin));
+
+            }
         }
 
         void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {

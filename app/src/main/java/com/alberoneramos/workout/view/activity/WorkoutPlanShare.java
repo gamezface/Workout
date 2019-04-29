@@ -1,15 +1,17 @@
 package com.alberoneramos.workout.view.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alberoneramos.workout.R;
 import com.alberoneramos.workout.adapter.ExerciseListAdapter;
@@ -30,11 +32,16 @@ import butterknife.ButterKnife;
 
 public class WorkoutPlanShare extends AppCompatActivity {
 
-    @BindView(R.id.workoutTitle)TextView title;
-    @BindView(R.id.back) ImageButton backButton;
-    @BindView(R.id.empty)TextView emptyText;
-    @BindView(R.id.add_workout)ImageButton addWorkoutButton;
-    @BindView(R.id.exerciseList) EmptyRecyclerView exerciseList;
+    @BindView(R.id.workoutTitle)
+    TextView title;
+    @BindView(R.id.back)
+    ImageButton backButton;
+    @BindView(R.id.empty)
+    TextView emptyText;
+    @BindView(R.id.add_workout)
+    ImageButton addWorkoutButton;
+    @BindView(R.id.exerciseList)
+    EmptyRecyclerView exerciseList;
     WorkoutPlan workoutPlan;
     DatabaseReference ref;
 
@@ -43,7 +50,7 @@ public class WorkoutPlanShare extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_plan_share);
         ButterKnife.bind(this);
-        FirebaseDynamicLinks.getInstance().getDynamicLink(getIntent()).addOnFailureListener(e -> Log.e("LinkError",e.getMessage())).addOnSuccessListener (e ->{
+        FirebaseDynamicLinks.getInstance().getDynamicLink(getIntent()).addOnFailureListener(e -> Log.e("LinkError", e.getMessage())).addOnSuccessListener(e -> {
             Uri link = e.getLink();
             ref = FirebaseDatabase.getInstance().getReference(Objects.requireNonNull(link.getQueryParameter("USER_ID")))
                     .child("/workouts")
@@ -52,11 +59,10 @@ public class WorkoutPlanShare extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     workoutPlan = dataSnapshot.getValue(WorkoutPlan.class);
-                    if(workoutPlan == null){
-                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.workout_not_found), Toast.LENGTH_SHORT).show();
+                    if (workoutPlan == null) {
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.workout_not_found), Toast.LENGTH_SHORT).show();
                         finish();
-                    }
-                    else{
+                    } else {
                         title.setText(workoutPlan.getName());
                         recyclerViewSetup();
                     }
@@ -64,39 +70,40 @@ public class WorkoutPlanShare extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.e("ReadError",databaseError.getMessage());
+                    Log.e("ReadError", databaseError.getMessage());
                 }
             });
         });
-        backButton.setOnClickListener((l) -> openMainActivity());
-        addWorkoutButton.setOnClickListener((l) -> addWorkout());
+        backButton.setOnClickListener((l) -> WorkoutPlanShareController.openMainActivity(this));
+        addWorkoutButton.setOnClickListener((l) -> WorkoutPlanShareController.addWorkout(workoutPlan, this));
     }
 
-    public void openMainActivity(){
-        Intent intent = new Intent(WorkoutPlanShare.this, HomescreenActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
-        startActivity(intent);
-    }
-
-    public void addWorkout(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        String key = database.getReference("workouts").push().getKey();
-        workoutPlan.setWorkoutPlanId(key);
-        if (key != null) {
-            database
-                    .getReference().child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()+"/workouts")
-                    .child(key)
-                    .setValue(workoutPlan);
-        }
-        openMainActivity();
-    }
-
-
-    public void recyclerViewSetup(){
-        ExerciseListAdapter adapter = new ExerciseListAdapter(this,workoutPlan.getExercises());
+    public void recyclerViewSetup() {
+        ExerciseListAdapter adapter = new ExerciseListAdapter(this, workoutPlan.getExercises());
         exerciseList.setAdapter(adapter);
         exerciseList.setEmptyView(emptyText);
         exerciseList.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    static class WorkoutPlanShareController {
+        static void openMainActivity(Activity activity) {
+            Intent intent = new Intent(activity, HomescreenActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+            activity.startActivity(intent);
+        }
+
+        static void addWorkout(WorkoutPlan workoutPlan, Activity activity) {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            String key = database.getReference("workouts").push().getKey();
+            workoutPlan.setWorkoutPlanId(key);
+            if (key != null) {
+                database
+                        .getReference().child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid() + "/workouts")
+                        .child(key)
+                        .setValue(workoutPlan);
+            }
+            openMainActivity(activity);
+        }
     }
 }

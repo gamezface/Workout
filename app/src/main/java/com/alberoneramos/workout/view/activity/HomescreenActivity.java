@@ -2,15 +2,14 @@ package com.alberoneramos.workout.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.View;
 
 import com.alberoneramos.workout.R;
 import com.alberoneramos.workout.controller.NavigationManager;
 import com.alberoneramos.workout.view.fragment.QRScannerFragment;
 import com.alberoneramos.workout.view.fragment.WorkoutListFragment;
-import com.alberoneramos.workout.view.fragment.CalendarFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomescreenActivity extends AppCompatActivity {
@@ -19,13 +18,14 @@ public class HomescreenActivity extends AppCompatActivity {
             = item -> {
         switch (item.getItemId()) {
             case R.id.navigation_home:
-                NavigationManager.openFragment(getSupportFragmentManager(),new WorkoutListFragment(),"Home",R.id.fragment_container);
+                NavigationManager.openFragment(getSupportFragmentManager(), new WorkoutListFragment(), "Home", R.id.fragment_container);
                 return true;
             case R.id.navigation_calendar:
-                NavigationManager.openFragment(getSupportFragmentManager(),new CalendarFragment(),"Home",R.id.fragment_container);
+//                NavigationManager.openFragment(getSupportFragmentManager(),new CalendarFragment(),"Home",R.id.fragment_container);
+                NavigationManager.openActivity(this, MapsActivity.class);
                 return true;
             case R.id.navigation_qr_scanner:
-                NavigationManager.openFragment(getSupportFragmentManager(),new QRScannerFragment(),"Home",R.id.fragment_container);
+                NavigationManager.openFragment(getSupportFragmentManager(), new QRScannerFragment(), "Home", R.id.fragment_container);
                 return true;
         }
         return false;

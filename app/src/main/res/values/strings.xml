@@ -64,5 +64,6 @@
     </array>
     <string name="title_activity_map">MapActivity</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_maps">Maps</string>
 </resources>
 

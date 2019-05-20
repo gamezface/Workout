@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.alberoneramos.workout.R;
 import com.alberoneramos.workout.controller.NavigationManager;
+import com.alberoneramos.workout.view.fragment.CalendarFragment;
 import com.alberoneramos.workout.view.fragment.QRScannerFragment;
 import com.alberoneramos.workout.view.fragment.WorkoutListFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -21,11 +22,13 @@ public class HomescreenActivity extends AppCompatActivity {
                 NavigationManager.openFragment(getSupportFragmentManager(), new WorkoutListFragment(), "Home", R.id.fragment_container);
                 return true;
             case R.id.navigation_calendar:
-//                NavigationManager.openFragment(getSupportFragmentManager(),new CalendarFragment(),"Home",R.id.fragment_container);
-                NavigationManager.openActivity(this, MapsActivity.class);
+                NavigationManager.openFragment(getSupportFragmentManager(),new CalendarFragment(),"Home",R.id.fragment_container);
                 return true;
             case R.id.navigation_qr_scanner:
                 NavigationManager.openFragment(getSupportFragmentManager(), new QRScannerFragment(), "Home", R.id.fragment_container);
+                return true;
+            case R.id.navigation_maps:
+                NavigationManager.openActivity(this, MapsActivity.class);
                 return true;
         }
         return false;

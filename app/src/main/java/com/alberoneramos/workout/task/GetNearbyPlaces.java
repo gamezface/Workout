@@ -42,7 +42,7 @@ public class GetNearbyPlaces extends AsyncTask<Object, String, String>
     @Override
     protected void onPostExecute(String s)
     {
-        List<HashMap<String, String>> nearByPlacesList = null;
+        List<HashMap<String, String>> nearByPlacesList;
         DataParser dataParser = new DataParser();
         nearByPlacesList = dataParser.parse(s);
 

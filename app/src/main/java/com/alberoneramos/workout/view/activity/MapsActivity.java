@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.alberoneramos.workout.R;
+import com.alberoneramos.workout.controller.NavigationManager;
 import com.alberoneramos.workout.task.GetNearbyPlaces;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -35,6 +36,7 @@ public class MapsActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
+    private FusedLocationProviderClient fusedLocationClient;
     private GoogleMap mMap;
     private GoogleApiClient googleApiClient;
     private Marker currentUserLocationMarker;
@@ -46,6 +48,7 @@ public class MapsActivity extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -104,13 +107,18 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             buildGoogleApiClient();
-
             mMap.setMyLocationEnabled(true);
-        }
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, location -> {
+                        if (location != null) {
+                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18.0f));
+                        }
+                    });
 
+        }
     }
 
     @Override
@@ -146,8 +154,6 @@ public class MapsActivity extends FragmentActivity implements
         latitude = location.getLatitude();
         longitude = location.getLongitude();
 
-        Location lastLocation = location;
-
         if (currentUserLocationMarker != null) {
             currentUserLocationMarker.remove();
         }
@@ -156,7 +162,7 @@ public class MapsActivity extends FragmentActivity implements
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title("user Current Location");
+        markerOptions.title("Current Location");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker());
 
         currentUserLocationMarker = mMap.addMarker(markerOptions);
@@ -194,4 +200,9 @@ public class MapsActivity extends FragmentActivity implements
 
     }
 
+    @Override
+    public void onBackPressed() {
+        NavigationManager.openActivity(this, HomescreenActivity.class);
+        finish();
+    }
 }

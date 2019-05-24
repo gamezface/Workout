@@ -29,6 +29,7 @@ public class HomescreenActivity extends AppCompatActivity {
                 return true;
             case R.id.navigation_maps:
                 NavigationManager.openActivity(this, MapsActivity.class);
+                finish();
                 return true;
         }
         return false;

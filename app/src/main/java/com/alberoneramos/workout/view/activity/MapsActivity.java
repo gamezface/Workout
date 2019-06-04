@@ -15,7 +15,9 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.alberoneramos.workout.R;
 import com.alberoneramos.workout.controller.NavigationManager;
-import com.alberoneramos.workout.task.GetNearbyPlaces;
+import com.alberoneramos.workout.models.LocationGym;
+import com.alberoneramos.workout.models.Locations;
+import com.alberoneramos.workout.server.LocationClient;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -30,6 +32,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback,
@@ -57,42 +65,27 @@ public class MapsActivity extends FragmentActivity implements
     }
 
     public void onClick(View v) {
-        String gym = "academia";
-        String hospital = "hospital";
-        Object[] transferData = new Object[2];
-        GetNearbyPlaces getNearbyPlaces = new GetNearbyPlaces();
+        String gym = "workout";
+//        String hospital = "hospital";
+//        Object[] transferData = new Object[2];
+//        GetNearbyPlaces getNearbyPlaces = new GetNearbyPlaces();
 
         switch (v.getId()) {
             case R.id.btn_fitness:
-                mMap.clear();
-                String url = getUrl(latitude, longitude, gym);
-                transferData[0] = mMap;
-                transferData[1] = url;
-
-                getNearbyPlaces.execute(transferData);
-                Toast.makeText(this, "Searching nearby gyms...", Toast.LENGTH_SHORT).show();
-                Toast.makeText(this, "Showing Nearby gyms...", Toast.LENGTH_SHORT).show();
+                MapsRepository.searchForLocations(mMap);
                 break;
-
             case R.id.btn_run:
                 mMap.clear();
-                String url2 = getUrl(latitude, longitude, hospital);
-                transferData[0] = mMap;
-                transferData[1] = url2;
-
-                getNearbyPlaces.execute(transferData);
-                Toast.makeText(this, "Searching nearby hospitals...", Toast.LENGTH_SHORT).show();
-                Toast.makeText(this, "Showing Nearby hospitals...", Toast.LENGTH_SHORT).show();
                 break;
 
         }
     }
 
 
-    private String getUrl(double latitide, double longitude, String nearbyPlace) {
+    private String getUrl(double latitude, double longitude, String nearbyPlace) {
         StringBuilder googleURL = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        googleURL.append("location=" + latitide + "," + longitude);
-        int proximityRadius = 10000;
+        googleURL.append("location=" + latitude + "," + longitude);
+        int proximityRadius = 1000;
         googleURL.append("&radius=" + proximityRadius);
         googleURL.append("&type=" + nearbyPlace);
         googleURL.append("&sensor=true");
@@ -205,4 +198,43 @@ public class MapsActivity extends FragmentActivity implements
         NavigationManager.openActivity(this, HomescreenActivity.class);
         finish();
     }
+
+    private static class MapsRepository {
+        public static void searchForLocations(GoogleMap mMap) {
+            Call<Locations> call;
+            call = new LocationClient().getApiService().getLocations();
+            call.enqueue(new Callback<Locations>() {
+                @Override
+                public void onResponse(Call<Locations> call, Response<Locations> response) {
+                    Locations data = response.body();
+                    displayNearbyPlaces(data.getLocations(), mMap);
+                }
+
+                @Override
+                public void onFailure(Call<Locations> call, Throwable t) {
+                    System.out.print("");
+                }
+            });
+        }
+
+        public static void displayNearbyPlaces(List<LocationGym> locations, GoogleMap mMap) {
+            for (LocationGym location : locations) {
+                MarkerOptions markerOptions = new MarkerOptions();
+
+                String nameOfPlace = location.getName();
+                double lat = Double.parseDouble(location.getLatitude());
+                double lng = Double.parseDouble(location.getLongitude());
+
+
+                LatLng latLng = new LatLng(lat, lng);
+                markerOptions.position(latLng);
+                markerOptions.title(nameOfPlace);
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker());
+                mMap.addMarker(markerOptions);
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+            }
+        }
+    }
 }
+

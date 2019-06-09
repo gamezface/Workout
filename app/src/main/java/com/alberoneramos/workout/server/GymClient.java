@@ -5,7 +5,7 @@ import com.alberoneramos.workout.models.Locations;
 import retrofit2.Call;
 import retrofit2.http.GET;
 
-public class LocationClient extends GenericClient {
+public class GymClient extends GenericClient {
 
     public LocationService getApiService() {
         return retrofit.create(LocationService.class);

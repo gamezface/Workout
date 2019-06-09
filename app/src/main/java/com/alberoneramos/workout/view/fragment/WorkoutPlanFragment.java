@@ -4,14 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -23,10 +17,17 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.alberoneramos.workout.R;
-import com.alberoneramos.workout.controller.WorkoutPlanController;
 import com.alberoneramos.workout.adapter.ExerciseListAdapter;
 import com.alberoneramos.workout.adapter.ExerciseListSetsAdapter;
+import com.alberoneramos.workout.controller.WorkoutPlanController;
 import com.alberoneramos.workout.models.Exercise;
 import com.alberoneramos.workout.models.WorkoutPlan;
 import com.alberoneramos.workout.utils.UrlBuilder;
@@ -39,6 +40,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
+import com.yashovardhan99.timeit.Stopwatch;
 
 import java.util.List;
 import java.util.Objects;
@@ -46,6 +48,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
+import cn.iwgang.countdownview.CountdownView;
 
 
 public class WorkoutPlanFragment extends Fragment {
@@ -59,6 +62,8 @@ public class WorkoutPlanFragment extends Fragment {
     RecyclerView exerciseListRepetition;
     @BindView(R.id.workoutTitle)
     TextView title;
+    @BindView(R.id.timer)
+    TextView timer;
     @BindView(R.id.back)
     ImageButton backButton;
     @BindView(R.id.more)
@@ -85,12 +90,15 @@ public class WorkoutPlanFragment extends Fragment {
         buildUrl();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_workoutplan_list, container, false);
         ButterKnife.bind(this, view);
         recyclerViewSetup();
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.setTextView(timer);
         moreButton.setOnClickListener(this::showPopup);
         backButton.setOnClickListener(l -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
         workoutToggleButton.setOnCheckedChangeListener(((buttonView, isChecked) -> {
@@ -99,15 +107,25 @@ public class WorkoutPlanFragment extends Fragment {
                         getResources().getColor(android.R.color.white));
                 exerciseListRepetition.setVisibility(View.VISIBLE);
                 exerciseListRepetition.invalidate();
+                timer.setTextColor(getResources().getColor(R.color.colorPrimary));
+                timer.setTranslationZ(30);
+                timer.bringToFront();
+                if(stopwatch.getElapsedTime()>0){
+                    stopwatch.resume();
+                } else {
+                    stopwatch.start();
+                }
                 exerciseList.setVisibility(View.GONE);
                 exerciseList.invalidate();
             } else {
-                toggleToolbarColors(getResources().getColor(android.R.color.white), getResources().getColor(R.color.colorPrimary),
-                        getResources().getColor(android.R.color.black));
-                exerciseListRepetition.setVisibility(View.GONE);
-                exerciseList.setVisibility(View.VISIBLE);
-                exerciseListRepetition.invalidate();
-                exerciseList.invalidate();
+                stopwatch.pause();
+                timer.setTextColor(getResources().getColor(R.color.white));
+//                toggleToolbarColors(getResources().getColor(android.R.color.white), getResources().getColor(R.color.colorPrimary),
+//                        getResources().getColor(android.R.color.black));
+//                exerciseListRepetition.setVisibility(View.GONE);
+//                exerciseList.setVisibility(View.VISIBLE);
+//                exerciseListRepetition.invalidate();
+//                exerciseList.invalidate();
             }
         }));
         title.setText(workoutPlan.getName());

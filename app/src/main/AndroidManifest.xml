@@ -36,10 +36,6 @@
             android:name=".view.activity.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
         <activity
-            android:name=".view.activity.MapActivity"
-            android:label="@string/title_activity_map"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".view.activity.HomescreenActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize" />

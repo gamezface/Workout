@@ -99,7 +99,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/toggle_button_background"
-                android:drawableRight="@drawable/toggle_button_drawable"
+                android:drawableEnd="@drawable/toggle_button_drawable"
                 android:elevation="8dp"
                 android:gravity="center_vertical|left"
                 android:paddingLeft="16dp"
@@ -112,6 +112,19 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/workoutTitle" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.appcompat.widget.Toolbar>

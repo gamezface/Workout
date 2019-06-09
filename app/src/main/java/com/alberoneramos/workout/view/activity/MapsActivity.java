@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -17,7 +18,8 @@ import com.alberoneramos.workout.R;
 import com.alberoneramos.workout.controller.NavigationManager;
 import com.alberoneramos.workout.models.LocationGym;
 import com.alberoneramos.workout.models.Locations;
-import com.alberoneramos.workout.server.LocationClient;
+import com.alberoneramos.workout.server.GymClient;
+import com.alberoneramos.workout.server.PracaClient;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -65,16 +67,14 @@ public class MapsActivity extends FragmentActivity implements
     }
 
     public void onClick(View v) {
-        String gym = "workout";
-//        String hospital = "hospital";
-//        Object[] transferData = new Object[2];
-//        GetNearbyPlaces getNearbyPlaces = new GetNearbyPlaces();
-
         switch (v.getId()) {
             case R.id.btn_fitness:
-                MapsRepository.searchForLocations(mMap);
+                MapsRepository.searchForGyms(mMap);
                 break;
             case R.id.btn_run:
+                MapsRepository.searchForAreas(mMap);
+                break;
+            case R.id.btn_clear:
                 mMap.clear();
                 break;
 
@@ -111,6 +111,10 @@ public class MapsActivity extends FragmentActivity implements
                         }
                     });
 
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1);
         }
     }
 
@@ -200,14 +204,14 @@ public class MapsActivity extends FragmentActivity implements
     }
 
     private static class MapsRepository {
-        public static void searchForLocations(GoogleMap mMap) {
+        static void searchForGyms(GoogleMap mMap) {
             Call<Locations> call;
-            call = new LocationClient().getApiService().getLocations();
+            call = new GymClient().getApiService().getLocations();
             call.enqueue(new Callback<Locations>() {
                 @Override
                 public void onResponse(Call<Locations> call, Response<Locations> response) {
                     Locations data = response.body();
-                    displayNearbyPlaces(data.getLocations(), mMap);
+                    displayNearbyPlaces(data.getLocations(), mMap, BitmapDescriptorFactory.HUE_AZURE);
                 }
 
                 @Override
@@ -217,7 +221,24 @@ public class MapsActivity extends FragmentActivity implements
             });
         }
 
-        public static void displayNearbyPlaces(List<LocationGym> locations, GoogleMap mMap) {
+        static void searchForAreas(GoogleMap mMap) {
+            Call<Locations> call;
+            call = new PracaClient().getApiService().getLocations();
+            call.enqueue(new Callback<Locations>() {
+                @Override
+                public void onResponse(Call<Locations> call, Response<Locations> response) {
+                    Locations data = response.body();
+                    displayNearbyPlaces(data.getLocations(), mMap, BitmapDescriptorFactory.HUE_ORANGE);
+                }
+
+                @Override
+                public void onFailure(Call<Locations> call, Throwable t) {
+                    System.out.print("");
+                }
+            });
+        }
+
+        static void displayNearbyPlaces(List<LocationGym> locations, GoogleMap mMap, float color) {
             for (LocationGym location : locations) {
                 MarkerOptions markerOptions = new MarkerOptions();
 
@@ -229,10 +250,10 @@ public class MapsActivity extends FragmentActivity implements
                 LatLng latLng = new LatLng(lat, lng);
                 markerOptions.position(latLng);
                 markerOptions.title(nameOfPlace);
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker());
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(color));
                 mMap.addMarker(markerOptions);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
             }
         }
     }

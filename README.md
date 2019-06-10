@@ -1,2 +1,2 @@
 # Workout
-Trabalho Interdisciplinar de Software
+Trabalho de laboratório de software
